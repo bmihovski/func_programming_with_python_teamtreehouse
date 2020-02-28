@@ -1,5 +1,6 @@
 import json
 from copy import copy
+from functools import reduce
 from operator import attrgetter, itemgetter
 
 
@@ -93,4 +94,46 @@ cheap_books = sorted(
     key=attrgetter('price')
 )
 
-print(cheap_books[0])
+#print(cheap_books[0])
+
+
+### REDUCE ###
+
+
+def add_book_prices(book1, book2):
+    return book1 + book2
+
+
+total = reduce(add_book_prices, [b.price for b in BOOKS])
+#print(total)
+
+
+def long_total(a=None, b=None, books=None):
+    """Reduce representation"""
+    if a is None and b is None and books is None:
+        return None
+    if a is None and b is None and books is not None:
+        a = books.pop(0)
+        b = books.pop(0)
+        return long_total(a, b, books)
+    if a is not None and books and b is None and books is not None:
+        b = books.pop(0)
+        return long_total(a, b, books)
+    if a is not None and b is not None and books is not None:
+        return long_total(a + b, None, books)
+    if a is not None and b is not None and books is None:
+        return long_total(a + b, None, None)
+    if a is not None and b is None and not books or books is None:
+        return a
+
+
+#print(long_total(None, None, [b.price for b in BOOKS]))
+
+def factorial(n):
+    if n == 1:
+        return 1
+    else:
+        return n * factorial(n - 1)
+
+
+print(factorial(5))
