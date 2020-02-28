@@ -1,5 +1,5 @@
 import json
-
+from operator import attrgetter, itemgetter
 
 class Book:
     def __init__(self, **kwargs):
@@ -24,3 +24,9 @@ def get_books(filename, raw=False):
         return [Book(**book) for book in data['books']]
 
 BOOKS = get_books('books.json')
+
+RAW_BOOKS = get_books('books.json', raw=True)
+
+# pub_sort = sorted(RAW_BOOKS, key=itemgetter('publish_date'))
+pages_sort = sorted(BOOKS, key=attrgetter('number_of_pages'))
+print(pages_sort[0].number_of_pages, pages_sort[-1].number_of_pages)
