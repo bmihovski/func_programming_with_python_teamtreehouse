@@ -1,6 +1,6 @@
 import json
 from copy import copy
-from functools import reduce
+from functools import reduce, partial
 from operator import attrgetter, itemgetter
 
 
@@ -83,7 +83,7 @@ def titlecase(book):
     return book
 
 
-#print(list(map(titlecase, filter(has_roland, BOOKS))))
+# print(list(map(titlecase, filter(has_roland, BOOKS))))
 
 def is_good_deal(book):
     return book.price <= 5
@@ -94,7 +94,8 @@ cheap_books = sorted(
     key=attrgetter('price')
 )
 
-#print(cheap_books[0])
+
+# print(cheap_books[0])
 
 
 ### REDUCE ###
@@ -105,7 +106,9 @@ def add_book_prices(book1, book2):
 
 
 total = reduce(add_book_prices, [b.price for b in BOOKS])
-#print(total)
+
+
+# print(total)
 
 
 def long_total(a=None, b=None, books=None):
@@ -127,7 +130,7 @@ def long_total(a=None, b=None, books=None):
         return a
 
 
-#print(long_total(None, None, [b.price for b in BOOKS]))
+# print(long_total(None, None, [b.price for b in BOOKS]))
 
 def factorial(n):
     if n == 1:
@@ -136,7 +139,7 @@ def factorial(n):
         return n * factorial(n - 1)
 
 
-#print(factorial(5))
+# print(factorial(5))
 
 ### LAMBDA ###
 
@@ -146,3 +149,17 @@ long_books = filter(lambda book: book.number_of_pages >= 600, BOOKS)
 good_deals = filter(lambda book: book.price <= 6, BOOKS)
 print(len(list(good_deals)))
 
+
+### PARTIALS ###
+
+def mark_down(book, discount):
+    book = copy(book)
+    book.price = round(book.price - book.price * discount, 2)
+    return book
+
+
+standard = partial(mark_down, discount=.2)
+#print(standard(BOOKS[0]).price)
+half = partial(mark_down, discount=.4)
+half_price_long_books = map(half, filter(is_long_book, BOOKS))
+#print(list(half_price_long_books))
