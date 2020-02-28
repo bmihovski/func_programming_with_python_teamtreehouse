@@ -136,4 +136,13 @@ def factorial(n):
         return n * factorial(n - 1)
 
 
-print(factorial(5))
+#print(factorial(5))
+
+### LAMBDA ###
+
+
+total = reduce(lambda x, y: x + y, [b.price for b in BOOKS])
+long_books = filter(lambda book: book.number_of_pages >= 600, BOOKS)
+good_deals = filter(lambda book: book.price <= 6, BOOKS)
+print(len(list(good_deals)))
+
