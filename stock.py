@@ -147,7 +147,7 @@ def factorial(n):
 total = reduce(lambda x, y: x + y, [b.price for b in BOOKS])
 long_books = filter(lambda book: book.number_of_pages >= 600, BOOKS)
 good_deals = filter(lambda book: book.price <= 6, BOOKS)
-print(len(list(good_deals)))
+#print(len(list(good_deals)))
 
 
 ### PARTIALS ###
@@ -163,3 +163,30 @@ standard = partial(mark_down, discount=.2)
 half = partial(mark_down, discount=.4)
 half_price_long_books = map(half, filter(is_long_book, BOOKS))
 #print(list(half_price_long_books))
+
+
+### CURRYING ###
+
+def curried_f(x, y=None, z=None):
+    def f(x, y, z):
+        return x ** 3 + y ** 2 + z
+
+    if y is not None and z is not None:
+        return f(x, y, z)
+    if y is not None:
+        return lambda z: f(x, y, z)
+
+    return lambda y, z=None: (
+        f(x, y, z) if (y is not None and z is not None)
+        else (lambda z: f(x, y, z))
+    )
+
+
+print(curried_f(2, 3, 4))
+first_func = curried_f(2)
+print(first_func)
+second_func = first_func(3)
+print(second_func)
+third_func = second_func(4)
+print(third_func)
+
